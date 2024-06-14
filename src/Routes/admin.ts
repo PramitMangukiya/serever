@@ -39,3 +39,35 @@ router.post("/admin/get/all",adminController.get_all_booking)
 router.get("/admin/:id",adminController.get_by_id_booking)
 router.delete("/admin/delete",adminController.get_all_data_delete)
 export const adminRouter = router
+
+
+// website : { 
+//     _id : 665aaae3bf06408a4b1be4b4
+//     name : Playsta
+//     url : [﻿uat.playstta.com](https://uat.playstta.com/) 
+//     userType : website
+//     uniqueId : WEB6537
+// }
+// traId : TRA224106898773933726704317
+// commisionReceiverType : VENDOR / TES / PG
+// commisionSenderType : VENDOR / AGENT / PG / TES
+// commissionSender : {
+//     _id: 65dcab940c891df78022a26a,
+//     name: demoVendor,
+//     userType: vendor
+// }
+// commissionReceiver : {
+//     _id: 65dcab940c891df78022a26a,
+//     name: wizpay,
+//     userType: PG
+// }
+// commissionAmount : 100
+// transactionType : withdraw/deposit,
+// transactionCreatedAt : 2024-06-03T07:41:15.282Z
+// transactionCompleteDate: 2024-06-03T07:41:15.282Z
+// createdAt : 2024-06-03T07:41:15.282Z
+// updatedAt : 2024-06-03T07:41:15.282Z
+
+
+
+
