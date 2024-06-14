@@ -9,7 +9,7 @@ export const new_deposit = async(req, res) => {
         // console.log("amount => ", req.body.amount);
         // setTimeout(() => {
             // if(!req.body.traId) 
-            // return res.status(400).json({status : 400, message : "traId not found"})
+            if(!req.body.metaData) return res.status(400).json({status : 400, message : "metaData not found"})
             return res.status(200).json(new apiResponse(200, "Your message", {}, {}));
         // }, 20000);
         // return res.status(200).json({status : 200, message : "edfedtfed"})
@@ -46,7 +46,7 @@ export const deposit_update = async(req, res) => {
 }
 export const deposit_rollback_update = async(req, res) => {
     try{
-        console.log("deposit rollback update => ", req.body);
+        console.log("deposit rollback update => ", req.body);   
         return res.status(200).json({status : 200, message : "edfedtfed"})
     }catch(error){
         // console.log(error);
@@ -92,7 +92,7 @@ export const withdraw_Verify = async(req, res) => {
         const response = await axios.post("http://localhost:4000/user/withdraw/verify", {...body})
         // const response = await axios.post("https://tes_api_dev.cloudd.live/api/v1/user/withdraw/verify", {...body})
         console.log("withdraw Verify => ",response.data);
-        // return res.status(200).json(new apiResponse(200, responseMessage?.getDataSuccess("response"), response.data.data, {}))
+        return res.status(200).json(new apiResponse(200, responseMessage?.getDataSuccess("response"), response.data.data, {}))
         // return res.status(400).json(new apiResponse(400, responseMessage?.getDataSuccess("response"), response.data.data, {}))
     }catch(error){
         // console.log(error);
@@ -106,8 +106,8 @@ export const withdraw_check_balance = async(req, res) => {
         // const response = await axios.post("https://tes_api_dev.cloudd.live/api/v1/user/withdraw/verify", {...body})
         let message = "abc"
         let message1 = "Hii How Are You"
-        return res.status(400).json(new apiResponse(400, message, {}, {}))
-        // return res.status(200).json(new apiResponse(200, message, message1, {}))
+        // return res.status(400).json(new apiResponse(400, message, {}, {}))
+        return res.status(200).json(new apiResponse(200, message, message1, {}))
     }catch(error){
         // console.log(error);
     }
@@ -175,7 +175,7 @@ export const bank_disbursment = async(req, res) => {
     let {traId} = req.body, {token} = req.query
     try{
         console.log("bank_disbursment => ",req.body);
-        return res.status(200).json({STATUS : "PENDING", MSG : "Transaction Status Message", RRN  : "Bank Reference Number", Name : "Beneficiary Name"})
+        return res.status(200).json({STATUS : "SUCCESS", MSG : "Transaction Status Message", RRN  : "Bank Reference Number", Name : "Beneficiary Name"})
         // return res.status(400).json({STATUS : "FAILED", MSG : "Transaction Status Message", RRN  : "Bank Reference Number", Name : "Beneficiary Name"})
         // return res.status(200).json({STATUS : "SUCCESS", MSG: 'DONE'})
         // return res.status(400).json({BeneficiaryName : ["BeneficiaryName is not valid!"]})
@@ -191,8 +191,8 @@ export const acepy_status_check = async(req, res) => {
     try{
         console.log("acepy_status_check => ",req.query);
         // return res.status(400).json({STATUS : "PENDING", MSG : "Transaction Status Message", RRN  : "Bank Reference Number", Name : "Beneficiary Name"})
-        return res.status(400).json({STATUS : "FAILED", MSG : "Transaction Status Message", RRN  : "Bank Reference Number", Name : "Beneficiary Name"})
-        // return res.status(200).json({STATUS : "SUCCESS", MSG: 'DONE'})
+        // return res.status(400).json({STATUS : "FAILED", MSG : "Transaction Status Message", RRN  : "Bank Reference Number", Name : "Beneficiary Name"})
+        return res.status(200).json({STATUS : "SUCCESS", MSG: 'DONE'})
         // return res.status(400).json({BeneficiaryName : ["BeneficiaryName is not valid!"]})
 
     }catch(error){
@@ -324,7 +324,6 @@ export const wizpay_upi_request = async(req, res) => {
     reqInfo(req)
     try{
         console.log("wizpay_upi_request headers => ",req.headers);
-        console.log("wizpay_upi_request body => ",req.body);
 
         return res.status(200).json(
             {
@@ -333,7 +332,7 @@ export const wizpay_upi_request = async(req, res) => {
                 "status": 201,
                 "data": {
                 "refID":	"81bd72b6-ca76-4bc0-9fde-d09587adb6f9",
-                "redirectURL": "#pay/81bd72b6-ca76-4bc0-9fde-d09587adb6f9",
+                "redirectURL": "http://localhost:4000/user/deposit/?id=4AnozI8WH",
                 "orderStatus": "pending"
                 }
             }
@@ -354,35 +353,37 @@ export const deposit_verification_payment_ss = async() => {
         //             "date": new Date(),
         //             "particulars": "yy5676",
         //             "cheque_reference_no": 45848484,
-        //             "debit": 158,
-        //             "credit": 158,
+        //             "debit": 100,
+        //             "credit": 210,
         //             "balance": 10000,
         //             "channel":  "IMPS", // IMPS
-        //             "utr": "2343er324r3w43w43w3w", //21343243 ,  21343243
-        //             "account_number" : 46545645646
+        //             "utr": "35r3w45", //21343243 ,  21343243
+        //             "account_number" : 46545645646,
+        //             "upiUtrId" : ""
         //         },
         //         {
         //             "date": new Date(),
         //             "particulars": "yy5676",
         //             "cheque_reference_no": 45848484,
-        //             "debit": 158,
-        //             "credit": 158,
+        //             "debit": 100,
+        //             "credit": 100,
         //             "balance": 10000,
         //             "channel":  "UPI", // IMPS
-        //             "utr": "3534r34r34wr3w43r3wr3wr4wd", //21343243 ,  21343243
-        //             "account_number" : 46545645646
-        //         },
-        //         {
-        //             "date": new Date(),
-        //             "particulars": "d54rr",
-        //             "cheque_reference_no": 45848484,
-        //             "debit": 158,
-        //             "credit": 158,
-        //             "balance": 10000,
-        //             "channel":  "UPI", // IMPS
+        //             "utr": "234wrf3453w5r3wr", //21343243 ,  21343243
         //             "account_number" : 46545645646,
-        //             "upiutrid" : "77845"
-        //         }
+        //             "upiUtrId" : ""
+        //         },
+        //         // {
+        //         //     "date": new Date(),
+        //         //     "particulars": "d54rr",
+        //         //     "cheque_reference_no": 45848484,
+        //         //     "debit": 158,
+        //         //     "credit": 158,
+        //         //     "balance": 10000,
+        //         //     "channel":  "UPI", // IMPS
+        //         //     "account_number" : 46545645646,
+        //         //     "upiutrid" : "77845" //this deposit upi amount key for the 2000 
+        //         // }
         //     ]
         // }
         let body = {
@@ -393,12 +394,13 @@ export const deposit_verification_payment_ss = async() => {
             "credit": 158,
             "balance": 10000,
             "channel":  "UPI", // IMPS
+            "utr" : "435r4wr54wr4w4rw33rw",
             "account_number" : 46545645646,
-            "upiutrid" : "61009"
+            "upiutrid" : "HT70LT8TY8S0"
         }
         
         const response = await axios.post("http://localhost:4000/statement/deposit/paymentss/verification", {...body}, {timeout : 20000})
-        // const response = await axios.post("https://tes_api_dev.cloudd.live/statement/deposit/paymentss/verification", {body}, {timeout : 20000})
+        // const response = await axios.post("https://tes_api_dev.cloudd.live/statement/deposit/paymentss/verification", {...body}, {timeout : 20000})
         // const response = await axios.post("https://tes-api-uat.cloudd.live/statement/deposit/paymentss/verification", {body}, {timeout : 20000})
         console.log("response => ",response);
     } catch (error) {
@@ -434,16 +436,43 @@ export const aeps_response = async() => {
     }
 }
 
+export const wizpay_status_check = async(req,res) => {
+    reqInfo(req)
+    let {id} = req.params
+    try{
+        console.log("id => ",id);
+        return res.status(200).json(
+            {
+                "merchantOrderID": "TRA802797249734806862357708",
+                "refID": "5046ca93-dc65-414e-b1ac-7443d16a2a55",
+                "type": "payin",
+                "paymentStatus": "approved",
+                "approvedBy": "user",
+                "createdAt": "2024-06-11T21:52:40.000Z",
+                "updatedAt": "2024-06-11T21:53:28.000Z",
+                "amount": 1000,
+                "customerUPIID": "",
+                "returnUrl": "https://api.paycorrect.fun/user/deposit/?id=ZIUtWQXM4",
+                "utr": "416346715147",
+                "vendor": "tesadmin",
+                "website": ""
+            }
+        )
+    }catch(error){
+        console.log(error);
+    }
+}
+
 export const withdraw_callback = async() => {
     try{
         let body = {
             "type":	"payin",
-            "amount": 1,
-            "orderId" : "TRA570045632674921042438835",
+            "amount": 300,
+            "orderId" : "TRA689260713722635591520990",
             "utr" :	"rishad@okicici-approved",
             "status": "approved"
         }
-        const response = await axios.post("http://localhost:4000/wizpay/payin", {...body}, {timeout : 20000})
+        const response = await axios.post("http://localhost:4000/deposit/payout", {...body}, {timeout : 20000})
         console.log("response => ",response);
     }catch(error){
         console.log(error);

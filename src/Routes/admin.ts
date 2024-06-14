@@ -24,6 +24,8 @@ router.post("/app/user/payout/createSinglePayoutTransaction", adminController.ph
 router.post("/ekoapi/v1/agent/user_code:user_code/settlement", adminController.aeps_payout)
 router.post("/extracttext", adminController.deposit_bank_request)
 router.post("/api/v1/orders", adminController.wizpay_upi_request)
+router.get("/api/v1/orders/:id", adminController.wizpay_status_check)
+
 
 
 
