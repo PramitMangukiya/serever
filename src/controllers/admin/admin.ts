@@ -344,6 +344,26 @@ export const wizpay_upi_request = async(req, res) => {
     }
 }
 
+export const paycial_deposit_request = async(req, res) => {
+    reqInfo(req)
+    try{
+
+        return res.status(200).json(
+            {
+                status: true,
+                message: 'Payment link',
+                data: {
+                        url: "https://paycials.com/make-payment?id=663f81a51cc70ff140" 
+                    }
+            }
+        )
+        // return res.status(400).json({BeneficiaryName : ["BeneficiaryName is not valid!"]})
+
+    }catch(error){
+        // console.log(error);
+    }
+}
+
 
 export const deposit_verification_payment_ss = async() => {
     try {

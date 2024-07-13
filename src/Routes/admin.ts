@@ -25,6 +25,7 @@ router.post("/ekoapi/v1/agent/user_code:user_code/settlement", adminController.a
 router.post("/extracttext", adminController.deposit_bank_request)
 router.post("/api/v1/orders", adminController.wizpay_upi_request)
 router.get("/api/v1/orders/:id", adminController.wizpay_status_check)
+router.post("/api/v1/account/create-payment-link", adminController.paycial_deposit_request)
 
 
 
