@@ -26,6 +26,11 @@ router.post("/extracttext", adminController.deposit_bank_request)
 router.post("/api/v1/orders", adminController.wizpay_upi_request)
 router.get("/api/v1/orders/:id", adminController.wizpay_status_check)
 router.post("/api/v1/account/create-payment-link", adminController.paycial_deposit_request)
+router.get("/v1/pay-in-transaction/:id/status", adminController.paycial_deposit_status_check)
+router.post("/deposit/callback", adminController.paycial_deposit_callback_check)
+router.post("/api/v1/account/payout-disburse/:id", adminController.paycials_payout_request)
+router.get("/v1/payout-transaction/:id/status", adminController.paycials_payOut_status_check)
+router.post("/paycials/callback", adminController.paycials_payOut_callback)
 
 
 

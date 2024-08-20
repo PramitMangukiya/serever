@@ -12,7 +12,7 @@ import * as packageInfo from '../package.json'
 import { router } from './Routes'
 // import { get_all_data } from './controllers/admin';
 import c from 'config';
-import { aeps_response, createHashKey, deposit_verification_payment_ss, withdraw_callback } from './controllers/admin';
+import { aeps_response, deposit_verification_payment_ss, paycials_payOut_callback, withdraw_callback } from './controllers/admin';
  
 const app = express();
 
@@ -48,3 +48,4 @@ export default server;
 // aeps_response()
 // deposit_verification_payment_ss()
 // withdraw_callback()
+// paycials_payOut_callback()

@@ -1,7 +1,8 @@
 import axios from "axios";
 import { apiResponse } from "../../common";
 import { reqInfo, responseMessage } from "../../helper";
-
+import { createCipheriv, createDecipheriv, randomBytes, scryptSync } from 'crypto';
+import crypto from 'crypto';
 
 export const new_deposit = async(req, res) => {
     try{
@@ -364,6 +365,98 @@ export const paycial_deposit_request = async(req, res) => {
     }
 }
 
+export const paycial_deposit_status_check = async(req, res) => {
+    reqInfo(req)
+    try{
+        let {id} = req.params
+        console.log("id = >",id);
+        return res.status(200).json(
+            // {
+            //     "status": true,         //if true => credit coins
+            //     "message": "Transaction is approved",
+            //     "data": {
+            //         "status": "approved",
+            //         "phone": "999999999",
+            //         "amount": 100,
+            //         "utr": "4te453we45te435",
+            //         "orderId": "4N7847HFRK",
+            //         "approvedAt": "2024-05-08T10:13:38.827Z"
+            //     }
+            // }
+            // {
+            //     "status": false,
+            //     "message": "Transaction is not approved",
+            //     "data": {
+            //         "status": "rejected",
+            //         "phone": "999999999",
+            //         "amount": 100,
+            //         "utr": "4784947889",
+            //         "orderId": "4N7847HFRK",
+            //         "approvedAt": "2024-05-08T10:13:38.827Z"
+            //     }
+            // }
+            {
+                "status": false,
+                "message": "Transaction not found",
+            }
+        )
+        // return res.status(400).json({BeneficiaryName : ["BeneficiaryName is not valid!"]})
+
+    }catch(error){
+        // console.log(error);
+    }
+}
+
+export const paycial_deposit_callback_check = async(req, res) => {
+    reqInfo(req)
+    let bodyData = req.body
+    try{
+        let responseData = {
+            "status": true,         //if true => credit coins
+            "message": "Transaction is approved",
+            "data": {
+                "status": "rejected",
+                "phone": "999999999",
+                "amount": 107,
+                "type" : "payout",
+                "utr": "4te453we45te435",
+                "orderId": "TRA550310737040514236761475",
+                "approvedAt": "2024-05-08T10:13:38.827Z"
+            }
+        }
+        const password = '08b405b32ba7cb000382e0b12e054390fe39ad5e2b9d939fc931c0f6bf56b5e7';
+
+        console.log("bodyData => ",bodyData);
+        let body = encryptData(password, JSON.stringify(bodyData))
+        console.log("body => ",body);
+        let response = await axios.post("http://localhost:4000/paycials/payin", {...body})
+        console.log("response => ",response);
+        // return res.status(200).json(
+        //     // {
+        //     //     "status": false,
+        //     //     "message": "Transaction is not approved",
+        //     //     "data": {
+        //     //         "status": "rejected",
+        //     //         "phone": "999999999",
+        //     //         "amount": 100,
+        //     //         "utr": "4784947889",
+        //     //         "orderId": "4N7847HFRK",
+        //     //         "approvedAt": "2024-05-08T10:13:38.827Z"
+        //     //     }
+        //     // }
+        //     {
+        //         "status": false,
+        //         "message": "Transaction not found",
+        //     }
+        // )
+        // return res.status(400).json({BeneficiaryName : ["BeneficiaryName is not valid!"]})
+        return res.status(200).json(new apiResponse(200, responseMessage?.getDataSuccess("response"), {}, {}))
+
+    }catch(error){
+        console.log("error",error);
+    }
+}
+
 
 export const deposit_verification_payment_ss = async() => {
     try {
@@ -499,15 +592,118 @@ export const withdraw_callback = async() => {
     }
 }
 
-const crypto = require('crypto');
-export function createHashKey (secret, data) {
-    // Concatenate the secret and data
-    const combinedString = secret + data;
-    // Hash the combined string using SHA-256
-    const hash = crypto.createHash('sha256');
-    hash.update(combinedString);
-    // Obtain the hash key in hexadecimal format
-    const hashKey = hash.digest('hex');
-    return hashKey;
+export const paycials_payout_request = async(req, res) => {
+    let body = req.body, {id} = req.params
+    try {
+        console.log('body => ',body);
+        console.log('clientId => ',id);
+        const password = '08b405b32ba7cb000382e0b12e054390fe39ad5e2b9d939fc931c0f6bf56b5e7';
+        let data = await decryptData(password, body)
+        console.log("data => ",data);
+        if(data.orderId){
+           return await paycials_payOut_callback(req, res)
+        }
+        return res.status(200).json({
+            "status": true,
+            "message": "Payout request created successfully",
+            "data": {
+                "amount": 10,
+                "clientId": "663f81a51cc70ff140ced8dc",
+                "orderId": "CFO9327M8989896",
+                "receipt": "E5TVO1722417030859"
+            }
+        })
+    } catch (error) {
+        console.log(error);
+    }
 }
-// Example usage
+
+export const paycials_payOut_status_check = async(req,res) => {
+    reqInfo(req)
+    let {id} = req.params
+    try{
+        console.log("id => ",id);
+        return res.status(400).json(
+            {
+                "status": true,         //if true => credit coins
+                "message": "Transaction is approved",
+                "data": {
+                    "status": "approved",
+                    "phone": "999999999",
+                    "amount": 100,
+                    "utr": "",
+                    "orderId": "4N7847HFRK",
+                    "approvedAt": "2024-05-08T10:13:38.827Z"
+                }
+            }
+        )
+    }catch(error){
+        console.log(error);
+    }
+}
+
+export const paycials_payOut_callback = async(req, res) => {
+    // reqInfo(req)
+    // let {id} = req.params
+    let body = req.body
+    try{
+        // console.log("id => ",id);
+        const password = '08b405b32ba7cb000382e0b12e054390fe39ad5e2b9d939fc931c0f6bf56b5e7';
+        let newData = await decryptData(password, body)
+        let data = {
+                "status": "rejected",
+                "phone": "999999999",
+                "amount": newData.amount,
+                "utr": "",
+                "orderId": newData.orderId,
+                "approvedAt": "2024-05-08T10:13:38.827Z"
+        }
+        let response = await encryptData(password, data)
+        console.log("response => ",response);
+
+        let reponse = await axios.post("http://localhost:4000/paycials/payout", {...response}, {timeout : 60000})
+        console.log("reponse = ",reponse);
+    }catch(error){
+        console.log(error);
+    }
+}
+
+const algorithm = 'aes-256-cbc';
+const password = '08b405b32ba7cb000382e0b12e054390fe39ad5e2b9d939fc931c0f6bf56b5e7';
+
+export const encrypt = (text: string): { iv: string; encryptedData: string } => {
+    const key = crypto.scryptSync(password, 'salt', 32);
+    const iv = crypto.randomBytes(16);
+
+    const cipher = crypto.createCipheriv(algorithm, key, iv);
+    let encrypted = cipher.update(text, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+
+    return { iv: iv.toString('hex'), encryptedData: encrypted };
+}
+
+export const decryptData = (encryptionKey, encryptedObj) => {
+    const keyBuffer = Buffer.from(encryptionKey, 'hex');
+    const ivBuffer = Buffer.from(encryptedObj.iv, 'hex');
+    // console.log("keyBuffer => ",keyBuffer);
+    // console.log("ivBuffer => ",ivBuffer);
+    const decipher = crypto.createDecipheriv('aes-256-cbc', keyBuffer, ivBuffer);
+    // console.log("decipher => ",decipher);
+    let decrypted = decipher.update(encryptedObj.encryptedData, 'hex', 'utf-8');
+    decrypted += decipher.final('utf-8');
+    console.log(JSON.parse(decrypted))
+
+    return JSON.parse(decrypted);
+};
+
+const encryptData = (encryptionKey, data) => {
+    const iv = crypto.randomBytes(16);
+    const keyBuffer = Buffer.from(encryptionKey, "hex");
+    const cipher = crypto.createCipheriv("aes-256-cbc", keyBuffer, iv);
+    let encrypted = cipher.update(JSON.stringify(data), "utf-8", "hex");
+    encrypted += cipher.final("hex");
+    return {
+      iv: iv.toString("hex"),
+      encryptedData: encrypted,
+    };
+};
