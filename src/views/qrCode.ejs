@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Rupee Payment</title>
+</head>
+<body>
+    <h1>Digital Rupee Payment</h1>
+    
+    <form action="/generate" method="POST">
+        <label for="transactionId">Transaction ID:</label>
+        <input type="text" name="transactionId" id="transactionId" required>
+        
+        <label for="amount">Amount:</label>
+        <input type="number" name="amount" id="amount" required>
+        
+        <label for="appId">App ID:</label>
+        <input type="text" name="appId" id="appId" required>
+
+        <button type="submit">Generate QR Code</button>
+    </form>
+
+    <% if (qrCodeImage) { %>
+        <h2>Scan to Pay</h2>
+        <img src="<%= qrCodeImage %>" alt="QR Code">
+    <% } %>
+</body>
+</html>

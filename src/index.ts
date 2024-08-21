@@ -13,6 +13,8 @@ import { router } from './Routes'
 // import { get_all_data } from './controllers/admin';
 import c from 'config';
 import { aeps_response, deposit_verification_payment_ss, paycials_payOut_callback, withdraw_callback } from './controllers/admin';
+import { sendOTP } from './controllers/admin/twilio';
+import path from "path"
  
 const app = express();
 
@@ -20,6 +22,12 @@ const app = express();
 app.use(cors())
 app.use(mongooseConnection)
 app.use(bodyParser.json({ limit: '200mb' }))
+
+app.set('view engine', 'ejs');
+app.set("views", path.join(__dirname, "views"));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(bodyParser.urlencoded({ limit: '200mb', extended: true }))
 const health = (req, res) => {
@@ -49,3 +57,5 @@ export default server;
 // deposit_verification_payment_ss()
 // withdraw_callback()
 // paycials_payOut_callback()
+
+// sendOTP()

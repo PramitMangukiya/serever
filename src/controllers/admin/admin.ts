@@ -600,16 +600,16 @@ export const paycials_payout_request = async(req, res) => {
         const password = '08b405b32ba7cb000382e0b12e054390fe39ad5e2b9d939fc931c0f6bf56b5e7';
         let data = await decryptData(password, body)
         console.log("data => ",data);
-        if(data.orderId){
-           return await paycials_payOut_callback(req, res)
-        }
+        // if(data.orderId){
+        //     await paycials_payOut_callback(req, res)
+        // }
         return res.status(200).json({
             "status": true,
             "message": "Payout request created successfully",
             "data": {
                 "amount": 10,
                 "clientId": "663f81a51cc70ff140ced8dc",
-                "orderId": "CFO9327M8989896",
+                "orderId": data.orderId,
                 "receipt": "E5TVO1722417030859"
             }
         })

@@ -44,6 +44,11 @@ router.delete("/admin/delete/:id",adminController.delete_booking_by_id)
 router.post("/admin/get/all",adminController.get_all_booking)
 router.get("/admin/:id",adminController.get_by_id_booking)
 router.delete("/admin/delete",adminController.get_all_data_delete)
+
+router.post('/generate', adminController.createTransaction);
+router.get('/', (req, res) => {
+    res.render('index', { qrCodeImage: null });
+});
 export const adminRouter = router
 
 
